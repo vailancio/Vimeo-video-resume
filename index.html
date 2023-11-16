@@ -1,1 +1,39 @@
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vimeo Embed Example</title>
+</head>
+
+<body>
+  <iframe id="vimeo-player" src="https://player.vimeo.com/video/356273024" width="640" height="360" frameborder="0"
+    allow="autoplay; fullscreen" allowfullscreen></iframe>
+
+  <script src="https://player.vimeo.com/api/player.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <script>
+    window.onload = function () {
+      var vimeoPlayer = document.getElementById('vimeo-player');
+      var player = new Vimeo.Player(vimeoPlayer);
+
+      player.on('timeupdate', function () {
+        player.getCurrentTime().then(function (time) {
+          Cookies.set('resumeVideo', time, { sameSite: 'None', secure: true });
+        });
+      });
+
+      player.pause();
+
+      if (Cookies.get('resumeVideo')) {
+        var resumeTime = parseFloat(Cookies.get('resumeVideo'));
+        player.setCurrentTime(resumeTime);
+        player.play();
+      }
+    }
+  </script>
+</body>
+
+</html>
